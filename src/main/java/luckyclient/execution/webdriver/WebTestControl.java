@@ -117,6 +117,7 @@ public class WebTestControl {
 						if(driver != null) {
 							System.out.println("Current driver is: " + driver);
 						}else {
+							WebDriver wd = null;
 							driver = WebDriverInitialization.setWebDriverForTask(drivertype);
 						}					
 						

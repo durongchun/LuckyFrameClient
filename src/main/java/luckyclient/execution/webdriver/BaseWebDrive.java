@@ -61,8 +61,9 @@ public class BaseWebDrive {
 	 */
     public static void highLightElement(WebDriver driver, WebElement element){
     	Properties properties = SysConfig.getConfiguration();
-    	boolean highLight = BooleanUtil.toBoolean(properties.getProperty("webdriver.highlight"));
-
+    	//boolean highLight = BooleanUtil.toBoolean(properties.getProperty("webdriver.highlight"));
+    	boolean highLight=true;
+    	
     	if(highLight){
             JavascriptExecutor js = (JavascriptExecutor) driver;
             /*调用js将传入参数的页面元素对象的背景颜色和边框颜色分别设定为黄色和红色*/
