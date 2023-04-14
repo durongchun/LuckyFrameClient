@@ -4,6 +4,7 @@ import java.io.File;
 
 import luckyclient.netty.ClientHandler;
 import org.apache.log4j.PropertyConfigurator;
+import org.openqa.selenium.WebDriver;
 
 import luckyclient.execution.appium.AppTestControl;
 import luckyclient.execution.httpinterface.TestControl;
@@ -26,10 +27,35 @@ import springboot.RunService;
  * 
  */
 public class RunAutomationTest extends TestControl {
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
+//		try {
+//			PropertyConfigurator.configure(RunService.APPLICATION_HOME + File.separator + "log4j.conf");
+//			String taskid = args[0];
+//			TaskExecute task = GetServerApi.cgetTaskbyid(Integer.parseInt(taskid));
+//			TaskScheduling taskScheduling = GetServerApi.cGetTaskSchedulingByTaskId(Integer.parseInt(taskid));
+//			ClientHandler.clientId = taskScheduling.getClientId();
+//			SchedulingConstants.envName=taskScheduling.getEnvName();
+//			if (taskScheduling.getTaskType() == 0) {
+//				// 接口测试
+//				TestControl.taskExecutionPlan(task);
+//			} else if (taskScheduling.getTaskType() == 1) {
+//				// UI测试
+//				WebTestControl.taskExecutionPlan(task);
+//			} else if (taskScheduling.getTaskType() == 2) {
+//				AppTestControl.taskExecutionPlan(task);
+//			}
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			LogUtil.APP.error("启动测试任务运行主函数出现异常，请检查！",e);
+//		} finally{
+//			System.exit(0);
+//		}
+//	}
+	
+	public static void runAutomationTest(String taskid, WebDriver driver) {
 		try {
 			PropertyConfigurator.configure(RunService.APPLICATION_HOME + File.separator + "log4j.conf");
-			String taskid = args[0];
+//			String taskid = args[0];
 			TaskExecute task = GetServerApi.cgetTaskbyid(Integer.parseInt(taskid));
 			TaskScheduling taskScheduling = GetServerApi.cGetTaskSchedulingByTaskId(Integer.parseInt(taskid));
 			ClientHandler.clientId = taskScheduling.getClientId();
@@ -39,7 +65,7 @@ public class RunAutomationTest extends TestControl {
 				TestControl.taskExecutionPlan(task);
 			} else if (taskScheduling.getTaskType() == 1) {
 				// UI测试
-				WebTestControl.taskExecutionPlan(task);
+				WebTestControl.taskExecutionPlan(task, driver);
 			} else if (taskScheduling.getTaskType() == 2) {
 				AppTestControl.taskExecutionPlan(task);
 			}
@@ -47,7 +73,7 @@ public class RunAutomationTest extends TestControl {
 			// TODO Auto-generated catch block
 			LogUtil.APP.error("启动测试任务运行主函数出现异常，请检查！",e);
 		} finally{
-			System.exit(0);
+//			System.exit(0);
 		}
 	}
 }

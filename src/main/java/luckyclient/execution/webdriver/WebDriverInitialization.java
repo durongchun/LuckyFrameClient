@@ -131,5 +131,21 @@ public class WebDriverInitialization{
 		webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);  
         return webDriver;
 	}
+	/**
+	 * 初始化WebDriver
+	 * @return 返回初始化结果
+	 * @throws IOException 读取配置文件异常
+	 */
+	public static WebDriver setWebDriverForReuse(){		
+		String drivenpath= RunService.APPLICATION_HOME + File.separator+"BrowserDriven"+File.separator;
+		ChromeOptions options = new ChromeOptions();
+		System.setProperty("webdriver.chrome.driver",drivenpath+"chromedriver.exe");	
+        ChromeDriver webDriver = new ChromeDriver(options);        
+        webDriver.manage().window().maximize();        
+        webDriver.manage().timeouts().implicitlyWait(8, TimeUnit.SECONDS);        
+        webDriver.get("https://www.baidu.com");  
+        // driver.quit();       
+        return webDriver;
+	}		
 
 }

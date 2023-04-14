@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import luckyclient.execution.dispose.ChangString;
 import luckyclient.execution.webdriver.ocr.Ocr;
 import luckyclient.utils.LogUtil;
+import luckyclient.tool.playsound.*;
 
 /**
  * =================================================================
@@ -357,6 +358,11 @@ public class EncapsulateOperation {
             case "gettitle":
                 result = "获取到的值是【" + wd.getTitle() + "】";
                 LogUtil.APP.info("获取页面Title...【{}】",wd.getTitle());
+                break;
+            case "getvoice":
+            	PlayWav.playVoice(operationValue);
+                result = "获取到的语音文本是【" + operationValue + "】";
+                LogUtil.APP.info("获取语音文本...【{}】", operationValue);
                 break;
             case "getwindowhandle":
                 result = getTargetWindowHandle(wd, operationValue);

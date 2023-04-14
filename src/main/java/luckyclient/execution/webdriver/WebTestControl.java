@@ -74,7 +74,7 @@ public class WebTestControl {
 		wd.quit();
 	}
 
-	public static void taskExecutionPlan(TaskExecute task) {
+	public static void taskExecutionPlan(TaskExecute task, WebDriver driver) {
 		// 记录日志到数据库
 		serverOperation.exetype = 0;
 		String taskid = task.getTaskId().toString();
@@ -112,9 +112,14 @@ public class WebTestControl {
 				}
 
 				for(ProjectPlan pp:plans){
-					WebDriver wd = null;
+					//WebDriver wd = null;
 					try {
-						wd = WebDriverInitialization.setWebDriverForTask(drivertype);
+						if(driver != null) {
+							System.out.println("Current driver is: " + driver);
+						}else {
+							driver = WebDriverInitialization.setWebDriverForTask(drivertype);
+						}					
+						
 					} catch (WebDriverException e1) {
 						LogUtil.APP.error("初始化WebDriver出错 WebDriverException！", e1);
 					} catch (IOException e2) {
@@ -137,7 +142,7 @@ public class WebTestControl {
 						try {
 							// 插入开始执行的用例
 							caselog.insertTaskCaseExecute(taskid, taskScheduling.getProjectId(),pp.getPlanId(),testcase.getCaseId(),testcase.getCaseSign(), testcase.getCaseName(), 4);
-							WebCaseExecution.caseExcution(testcase, steps, taskid,pp.getPlanId(),wd, caselog, pcplist);
+							WebCaseExecution.caseExcution(testcase, steps, taskid,pp.getPlanId(), driver, caselog, pcplist);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							LogUtil.APP.error("用户执行过程中抛出异常！", e);
@@ -145,8 +150,8 @@ public class WebTestControl {
 						LogUtil.APP.info("当前用例:【{}】执行完成......进入下一条",testcase.getCaseSign());
 					}
 					LogUtil.APP.info("当前【{}】测试计划中的用例已经全部执行完成...",pp.getPlanName());
-					assert wd != null;
-					wd.quit();
+//					assert wd != null;
+//					wd.quit();
 				}
 
 				tastcount = serverOperation.updateTaskExecuteData(taskid, caseCount,2);

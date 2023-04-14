@@ -15,6 +15,7 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import luckyclient.execution.RunAutomationTest;
+import luckyclient.execution.webdriver.WebDriverInitialization;
 import luckyclient.remote.entity.monitor.Server;
 import luckyclient.utils.config.SysConfig;
 import luckyclient.utils.httputils.HttpRequest;
@@ -46,6 +49,8 @@ import springboot.model.WebDebugCaseEntity;
 public class HttpImpl {
 	private static final Logger log = LoggerFactory.getLogger(HttpImpl.class);
 	private static final String OS=System.getProperty("os.name").toLowerCase();
+	WebDriver driver;
+	
 	/**
 	 * 运行自动化任务
 	 * @param req HTTP请求
@@ -82,16 +87,22 @@ public class HttpImpl {
 			sbf.append(runTaskEntity.getTaskId()).append(" ");
 			sbf.append(runTaskEntity.getLoadPath());
 			log.info("启动任务模式测试程序...调度名称:【{}】  任务ID:【{}】",runTaskEntity.getSchedulingName(),runTaskEntity.getTaskId());
-			if(OS.startsWith("win")){
-				log.info("开始调起windows命令行窗口...");
-				run.exec("cmd.exe /k start " + "task.cmd" +" "+ sbf.toString(), null,new File(RunService.APPLICATION_HOME+File.separator));
-				log.info("调起windows命令行窗口完成...");
-			}else{
-				log.info("开始调起Linux命令脚本...");
-				Process ps = Runtime.getRuntime().exec(RunService.APPLICATION_HOME+File.separator+"task.sh"+ " " +sbf.toString());
-		        ps.waitFor();
-				log.info("调起Linux命令脚本完成...");
-			}			
+			
+			if (runTaskEntity.getSchedulingName().contains("Start Browser")) {
+				driver = WebDriverInitialization.setWebDriverForReuse();				
+			}else {
+				RunAutomationTest.runAutomationTest(runTaskEntity.getTaskId(), driver);
+			}	
+//			if(OS.startsWith("win")){
+//				log.info("开始调起windows命令行窗口...");
+//				run.exec("cmd.exe /k start " + "task.cmd" +" "+ sbf.toString(), null,new File(RunService.APPLICATION_HOME+File.separator));
+//				log.info("调起windows命令行窗口完成...");
+//			}else{
+//				log.info("开始调起Linux命令脚本...");
+//				Process ps = Runtime.getRuntime().exec(RunService.APPLICATION_HOME+File.separator+"task.sh"+ " " +sbf.toString());
+//		        ps.waitFor();
+//				log.info("调起Linux命令脚本完成...");
+//			}			
 		} catch (Exception e) {
 			log.error("启动任务模式测试程序异常！！！",e);
 			return "启动任务模式测试程序异常！！！";
