@@ -51,10 +51,10 @@ public class TokenDemo {
             JSONObject result = JSON.parseObject(response.getData());
             String token = result.getJSONObject(KEY_TOKEN).getString(KEY_ID);
             long expireTime = result.getJSONObject(KEY_TOKEN).getLongValue(KEY_EXPIRETIME);
-            System.out.println("鑾峰彇鍒扮殑Token锛? " + token + "锛屾湁鏁堟湡鏃堕棿鎴?(鍗曚綅锛氱): " + expireTime);
+            System.out.println("Token: " + token + "过期时间: " + expireTime);
             // 灏?10浣嶆暟鐨勬椂闂存埑杞崲涓哄寳浜椂闂?
             String expireDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(expireTime * 1000));
-            System.out.println("Token鏈夋晥鏈熺殑鍖椾含鏃堕棿锛?" + expireDate);
+            System.out.println("Token过期时间" + expireDate);
         }
         else {
             System.out.println("鑾峰彇Token澶辫触锛?");

@@ -147,15 +147,10 @@ public class SpeechSynthesizerRestfulDemo {
         }
     }
     public static String getVoice(String text) {
-//        if (args.length < 2) {
-//            System.err.println("SpeechSynthesizerRestfulDemo need params: <token> <app-key>");
-//            System.exit(-1);
-//        }
-        String token = "b99319e533ea487aaae1ee57397664ab";
+        String token = "f65b4415e7454795adfa86b09cf8ff0e";
         String appkey = "rfs83bFVLgV9opST";
         SpeechSynthesizerRestfulDemo demo = new SpeechSynthesizerRestfulDemo(appkey, token);
-        //String text = "今天是周�?，天气挺好的�?";
-        // 采用RFC 3986规范进行urlencode编码�?
+        
         String textUrlEncode = text;
         try {
             textUrlEncode = URLEncoder.encode(textUrlEncode, "UTF-8")
@@ -170,7 +165,7 @@ public class SpeechSynthesizerRestfulDemo {
         String format = "wav";
         int sampleRate = 16000;
         String url = demo.processGETRequet(textUrlEncode, audioSaveFile, format, sampleRate, "siyue");
-//        demo.processPOSTRequest(text, audioSaveFile, format, sampleRate, "siyue");
+//      demo.processPOSTRequest(text, audioSaveFile, format, sampleRate, "siyue");
         System.out.println("### Game Over ###");
 		return url;
     }	
