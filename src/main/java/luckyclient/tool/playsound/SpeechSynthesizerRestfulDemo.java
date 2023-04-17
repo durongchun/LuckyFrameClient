@@ -4,24 +4,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.concurrent.CountDownLatch;
-import io.netty.handler.codec.http.HttpHeaders;
-import org.asynchttpclient.AsyncHandler;
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.AsyncHttpClientConfig;
-import org.asynchttpclient.DefaultAsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClientConfig;
-import org.asynchttpclient.HttpResponseBodyPart;
-import org.asynchttpclient.HttpResponseStatus;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.exceptions.ClientException;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import com.alibaba.fastjson.JSONObject;
 public class SpeechSynthesizerRestfulDemo {
 	private String accessToken;
 	private String appkey;
@@ -61,25 +55,22 @@ public class SpeechSynthesizerRestfulDemo {
         // url = url + "&pitch_rate=" + String.valueOf(0);
         System.out.println("URL: " + url);
         /**
-         * 发�?�HTTPS GET请求，处理服务端的响应�??
+         * HTTPS GET请求，处理服务端的响应
          */
         Request request = new Request.Builder().url(url).get().build();
         try {
             long start = System.currentTimeMillis();
             OkHttpClient client = new OkHttpClient();
-            Response response = client.newCall(request).execute();
-            System.out.println("total latency :" + (System.currentTimeMillis() - start) + " ms");
-            System.out.println(response.headers().toString());
+            Response response = client.newCall(request).execute();            
             String contentType = response.header("Content-Type");
             if ("audio/mpeg".equals(contentType)) {
                 File f = new File(audioSaveFile);
                 FileOutputStream fout = new FileOutputStream(f);
                 fout.write(response.body().bytes());
-                fout.close();
-                System.out.println("The GET request succeed!");
+                fout.close();                
             }
             else {
-                // ContentType �? null 或�?�为 "application/json"
+                // ContentType null 或为 "application/json"
                 String errorMessage = response.body().string();
                 System.out.println("The GET request failed: " + errorMessage);
             }
@@ -137,7 +128,7 @@ public class SpeechSynthesizerRestfulDemo {
                 System.out.println("The POST request succeed!");
             }
             else {
-                // ContentType �? null 或�?�为 "application/json"
+                // ContentType  null 或为 "application/json"
                 String errorMessage = response.body().string();
                 System.out.println("The POST request failed: " + errorMessage);
             }
@@ -147,7 +138,13 @@ public class SpeechSynthesizerRestfulDemo {
         }
     }
     public static String getVoice(String text) {
-        String token = "f65b4415e7454795adfa86b09cf8ff0e";
+        String token = null;
+		try {
+			token = TokenDemo.getToken();
+		} catch (ClientException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         String appkey = "rfs83bFVLgV9opST";
         SpeechSynthesizerRestfulDemo demo = new SpeechSynthesizerRestfulDemo(appkey, token);
         
@@ -159,14 +156,12 @@ public class SpeechSynthesizerRestfulDemo {
                 .replace("%7E", "~");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }
-        System.out.println(textUrlEncode);
+        }        
         String audioSaveFile = "syAudio.wav";
         String format = "wav";
         int sampleRate = 16000;
         String url = demo.processGETRequet(textUrlEncode, audioSaveFile, format, sampleRate, "siyue");
-//      demo.processPOSTRequest(text, audioSaveFile, format, sampleRate, "siyue");
-        System.out.println("### Game Over ###");
+        //demo.processPOSTRequest(text, audioSaveFile, format, sampleRate, "siyue");        
 		return url;
     }	
 

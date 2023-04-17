@@ -1,6 +1,4 @@
 package luckyclient.tool.playsound;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.CommonRequest;
@@ -12,27 +10,19 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.http.ProtocolType;
 import com.aliyuncs.profile.DefaultProfile;
 
-public class TokenDemo {
-    // 鎮ㄧ殑鍦板煙ID
-    private static final String REGIONID = "cn-shanghai";
-    // 鑾峰彇Token鏈嶅姟鍩熷悕
-    private static final String DOMAIN = "nls-meta.cn-shanghai.aliyuncs.com";
-    // API 鐗堟湰
-    private static final String API_VERSION = "2019-02-28";
-    // API鍚嶇О
-    private static final String REQUEST_ACTION = "CreateToken";
-    // 鍝嶅簲鍙傛暟
+public class TokenDemo {    
+    private static final String REGIONID = "cn-shanghai";   
+    private static final String DOMAIN = "nls-meta.cn-shanghai.aliyuncs.com";    
+    private static final String API_VERSION = "2019-02-28";    
+    private static final String REQUEST_ACTION = "CreateToken";    
     private static final String KEY_TOKEN = "Token";
     private static final String KEY_ID = "Id";
-    private static final String KEY_EXPIRETIME = "ExpireTime";
-    public static void main(String args[]) throws ClientException {
-//        if (args.length < 2) {
-//            System.err.println("CreateTokenDemo need params: <AccessKey Id> <AccessKey Secret>");
-//            System.exit(-1);
-//        }              
+    //private static final String KEY_EXPIRETIME = "ExpireTime";
+    public static String getToken() throws ClientException {  
+    	String token=null;
         String accessKeyId = "qHBdEsPxGd3409fY";
         String accessKeySecret = "wasqwfiNX55lQuspubS7E4hvLURcEg";
-        // 鍒涘缓DefaultAcsClient瀹炰緥骞跺垵濮嬪寲
+        
         DefaultProfile profile = DefaultProfile.getProfile(
             REGIONID,
             accessKeyId,
@@ -49,15 +39,17 @@ public class TokenDemo {
         System.out.println(response.getData());
         if (response.getHttpStatus() == 200) {
             JSONObject result = JSON.parseObject(response.getData());
-            String token = result.getJSONObject(KEY_TOKEN).getString(KEY_ID);
-            long expireTime = result.getJSONObject(KEY_TOKEN).getLongValue(KEY_EXPIRETIME);
-            System.out.println("Token: " + token + "过期时间: " + expireTime);
-            // 灏?10浣嶆暟鐨勬椂闂存埑杞崲涓哄寳浜椂闂?
-            String expireDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(expireTime * 1000));
-            System.out.println("Token过期时间" + expireDate);
+            token = result.getJSONObject(KEY_TOKEN).getString(KEY_ID);
+            //long expireTime = result.getJSONObject(KEY_TOKEN).getLongValue(KEY_EXPIRETIME);
+            //System.out.println("Token: " + token + "过期时间: " + expireTime);
+           
+            //String expireDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(expireTime * 1000));
+            //System.out.println("Token过期时间" + expireDate);
         }
         else {
-            System.out.println("鑾峰彇Token澶辫触锛?");
+            System.out.println("Can't get the token successfully?");
         }
+		
+		return token;
     }
 }
