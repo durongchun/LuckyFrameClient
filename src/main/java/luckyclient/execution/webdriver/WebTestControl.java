@@ -146,7 +146,10 @@ public class WebTestControl {
 							WebCaseExecution.caseExcution(testcase, steps, taskid,pp.getPlanId(), driver, caselog, pcplist);							
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
-							LogUtil.APP.error("用户执行过程中抛出异常！", e);							
+							LogUtil.APP.error("用户执行过程中抛出异常！", e);
+							if (e.toString().contains("target window already closed")) {
+								break;
+							}
 						}
 						LogUtil.APP.info("当前用例:【{}】执行完成......进入下一条",testcase.getCaseSign());
 					}
