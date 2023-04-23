@@ -4,15 +4,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.hutool.core.util.NumberUtil;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import cn.hutool.core.util.NumberUtil;
 import luckyclient.execution.dispose.ActionManageForSteps;
 import luckyclient.execution.dispose.ParamsManageForSteps;
 import luckyclient.execution.httpinterface.TestCaseExecution;
@@ -120,7 +121,8 @@ public class WebCaseExecution{
         }
     }
 
-    public static String runWebStep(Map<String, String> params, WebDriver wd, String taskid, Integer caseId, int stepno, serverOperation caselog) {
+    @SuppressWarnings("unused")
+	public static String runWebStep(Map<String, String> params, WebDriver wd, String taskid, Integer caseId, int stepno, serverOperation caselog) {
         String result="";
         String property="";
         String propertyValue="";
@@ -176,7 +178,43 @@ public class WebCaseExecution{
                     LogUtil.APP.warn("定位对象失败，isElementExist为null!");
                     return "步骤执行失败：定位的元素不存在！";
                 }
+                
+                //判断当元素存在就点击
+                if(operation.equals("ifclick")) {
+                	//设置页面加载最大时长1秒
+                	wd.manage().timeouts().pageLoadTimeout(1,  TimeUnit.SECONDS);
+                	//设置页面JS加载最大时长1秒
+                	wd.manage().timeouts().setScriptTimeout(1, TimeUnit.SECONDS);
+                	//设置元素出现最大时长1秒
+                	wd.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);                	
+                	
+                	if(null==we){
+                      caselog.insertTaskCaseLog(taskid, caseId, "对象不存在，ifclick不需要进行点击", "info", String.valueOf(stepno), "");
+                      LogUtil.APP.info("获取到的值是【false】,元素不存在或者未显示，无需处理");
+                      return "获取到的值是【false】,元素不存在或者未显示，无需处理";
+                       }
 
+                     if(we.isDisplayed()){
+                         we.click();
+                         result = "ifclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                         LogUtil.APP.info("if元素存在，ifclick点击对象...【对象定位属性:{}; 定位属性值:{}】", property, propertyValue);
+                         caselog.insertTaskCaseLog(taskid, caseId, "对象存在，ifclick进行点击", "info", String.valueOf(stepno), "");
+                         return result;
+                         }
+
+                     // 设置页面加载最大时长1秒
+                     wd.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+                     //设置页面JS加载最大超时时长
+                     wd.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+                     // 设置元素出现最大时长1秒
+                      wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+                      result = "ifclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                      LogUtil.APP.info("if元素存在但未显示，ifclick跳过...【对象定位属性:{}; 定位属性值:{}】", property, propertyValue);
+                      caselog.insertTaskCaseLog(taskid, caseId, "对象存在但未显示，ifclick跳过", "info", String.valueOf(stepno), "");
+                      return result;
+                }
+                
                 //点亮即将操作的元素
                 BaseWebDrive.highLightElement(wd, we);
                 

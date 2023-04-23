@@ -22,8 +22,13 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import com.jayway.jsonpath.internal.Path;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.jayway.jsonpath.internal.Path;
+import com.mysql.cj.jdbc.Driver;
+
+import cn.hutool.db.Session;
 import springboot.RunService;
 
 public class PlayWav {
@@ -90,21 +95,28 @@ public class PlayWav {
     }
 
 
-	public static void playVoice(String text) {
-		// text to voice
-		// produceVoice(text);
-		String filePath = System.getProperty("user.dir") + "tts_test.wav";
+	public static void playVoice(String text, WebDriver driver) {
 		try {
-			saveFile(SpeechSynthesizerRestfulDemo.getVoice(text), filePath);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			driver.manage().getCookies();
+			// text to voice
+			// produceVoice(text);
+			String filePath = System.getProperty("user.dir") + "tts_test.wav";
+			try {
+				saveFile(SpeechSynthesizerRestfulDemo.getVoice(text), filePath);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// Play sound		
+			File file = new File(filePath);
+			if (file.exists()) {
+				playWav(filePath);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		// Play sound		
-		File file = new File(filePath);
-		if (file.exists()) {
-			playWav(filePath);
-		}
+		
+		
 	}
 
 	public static void copyVoice(String oldPath, String newPath) {

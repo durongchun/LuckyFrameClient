@@ -7,11 +7,23 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -19,8 +31,8 @@ import com.alibaba.fastjson.JSONObject;
 
 import luckyclient.execution.dispose.ChangString;
 import luckyclient.execution.webdriver.ocr.Ocr;
+import luckyclient.tool.playsound.PlayWav;
 import luckyclient.utils.LogUtil;
-import luckyclient.tool.playsound.*;
 
 /**
  * =================================================================
@@ -283,6 +295,58 @@ public class EncapsulateOperation {
                 result = "将目标对象滚动到可视...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("将目标对象滚动到可视...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break;
+            case "waitvisibility":
+                // 显式等待元素可见
+                WebDriverWait wait1=new WebDriverWait(wd,Long.parseLong(operationValue));
+                switch (property) {
+                    case "id":
+                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.id(propertyValue)));
+                        break;
+                    case "name":
+                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.name(propertyValue)));
+                        break;
+                    case "xpath":
+                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(propertyValue)));
+                        break;
+                    case "linktext":
+                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.linkText(propertyValue)));
+                        break;
+                    case "tagname":
+                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.tagName(propertyValue)));
+                        break;
+                    case "cssselector":
+                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(propertyValue)));
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case "waitnotvisibility":
+                // 显式等待元素消失
+                WebDriverWait wait4=new WebDriverWait(wd,Long.parseLong(operationValue));
+                switch (property) {
+                    case "id":
+                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id(propertyValue))));
+                        break;
+                    case "name":
+                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.name(propertyValue))));
+                        break;
+                    case "xpath":
+                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(propertyValue))));
+                        break;
+                    case "linktext":
+                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.linkText(propertyValue))));
+                        break;
+                    case "tagname":
+                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.tagName(propertyValue))));
+                        break;
+                    case "cssselector":
+                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(propertyValue))));
+                        break;
+                    default:
+                        break;
+                }
+                break; 
             default:
                 break;
         }
@@ -360,7 +424,7 @@ public class EncapsulateOperation {
                 LogUtil.APP.info("获取页面Title...【{}】",wd.getTitle());
                 break;
             case "getvoice":
-            	PlayWav.playVoice(operationValue);
+            	PlayWav.playVoice(operationValue, wd);
                 result = "获取到的语音文本是【" + operationValue + "】";
                 LogUtil.APP.info("获取语音文本...【{}】", operationValue);
                 break;

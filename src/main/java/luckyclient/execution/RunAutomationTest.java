@@ -73,7 +73,7 @@ public class RunAutomationTest extends TestControl {
 			// TODO Auto-generated catch block
 			LogUtil.APP.error("启动测试任务运行主函数出现异常，请检查！",e);
 		} finally{
-//			System.exit(0);
+//		System.exit(0);
 		}
 	}
 }

@@ -6,3 +6,4 @@
 *.prefs
 *.log
 *.log.*
+/bin/

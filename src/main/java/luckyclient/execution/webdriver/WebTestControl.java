@@ -139,13 +139,14 @@ public class WebTestControl {
 						if (steps.size() == 0) {
 							continue;
 						}
+						
 						try {
 							// 插入开始执行的用例
 							caselog.insertTaskCaseExecute(taskid, taskScheduling.getProjectId(),pp.getPlanId(),testcase.getCaseId(),testcase.getCaseSign(), testcase.getCaseName(), 4);
-							WebCaseExecution.caseExcution(testcase, steps, taskid,pp.getPlanId(), driver, caselog, pcplist);
+							WebCaseExecution.caseExcution(testcase, steps, taskid,pp.getPlanId(), driver, caselog, pcplist);							
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
-							LogUtil.APP.error("用户执行过程中抛出异常！", e);
+							LogUtil.APP.error("用户执行过程中抛出异常！", e);							
 						}
 						LogUtil.APP.info("当前用例:【{}】执行完成......进入下一条",testcase.getCaseSign());
 					}
