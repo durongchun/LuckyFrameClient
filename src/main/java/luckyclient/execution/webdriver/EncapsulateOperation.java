@@ -247,6 +247,11 @@ public class EncapsulateOperation {
                 result = "click点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("click点击对象...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break;
+            case "javascriptclick":
+            	BaseWebDrive.javascriptClick(wd, property, propertyValue);
+                result = "javascriptclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("javascriptclick点击对象...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+                break;
             case "sendkeys":
                 we.sendKeys(operationValue);
                 result = "sendKeys对象输入...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "; 操作值:" + operationValue + "】";
@@ -297,56 +302,28 @@ public class EncapsulateOperation {
                 break;
             case "waitvisibility":
                 // 显式等待元素可见
-                WebDriverWait wait1=new WebDriverWait(wd,Long.parseLong(operationValue));
-                switch (property) {
-                    case "id":
-                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.id(propertyValue)));
-                        break;
-                    case "name":
-                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.name(propertyValue)));
-                        break;
-                    case "xpath":
-                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(propertyValue)));
-                        break;
-                    case "linktext":
-                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.linkText(propertyValue)));
-                        break;
-                    case "tagname":
-                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.tagName(propertyValue)));
-                        break;
-                    case "cssselector":
-                        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(propertyValue)));
-                        break;
-                    default:
-                        break;
-                }
+            	BaseWebDrive.waitvisibility(wd, operationValue, property, propertyValue);
+            	result = "目标对象可视...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("目标对象可视...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break;
             case "waitnotvisibility":
                 // 显式等待元素消失
-                WebDriverWait wait4=new WebDriverWait(wd,Long.parseLong(operationValue));
-                switch (property) {
-                    case "id":
-                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id(propertyValue))));
-                        break;
-                    case "name":
-                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.name(propertyValue))));
-                        break;
-                    case "xpath":
-                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(propertyValue))));
-                        break;
-                    case "linktext":
-                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.linkText(propertyValue))));
-                        break;
-                    case "tagname":
-                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.tagName(propertyValue))));
-                        break;
-                    case "cssselector":
-                        wait4.until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(propertyValue))));
-                        break;
-                    default:
-                        break;
-                }
+            	BaseWebDrive.waitnotvisibility(wd, operationValue, property, propertyValue);
+            	result = "目标对象不可見...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("目标对象不可見...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break; 
+            case "waitclickable":
+                // 显式等待元素可见
+            	BaseWebDrive.isElementClickable(wd, operationValue, property, propertyValue);
+            	result = "目标对象可视...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("目标对象可视...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+                break;
+            case "sleep":
+                // 強制等待
+            	BaseWebDrive.sleep(operationValue);
+            	result = "強制等待...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("強制等待...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+                break;
             default:
                 break;
         }
