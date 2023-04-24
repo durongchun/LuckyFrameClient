@@ -108,7 +108,7 @@ public class BaseWebDrive {
         executor.executeScript("arguments[0].click();", element);
     }
     
-    public void retryClick(WebDriver driver, String operationValue, String property, String propertyValue) { 			
+    public static void retryClick(WebDriver driver, String operationValue, String property, String propertyValue) { 			
     	JavascriptExecutor js = (JavascriptExecutor) driver; 			
     	WebElement element = null;
     	switch (property) {
@@ -147,7 +147,7 @@ public class BaseWebDrive {
 	}		
     			
     
-    public boolean waitForElementToBeClickable(WebDriver driver, String operationValue, String property, String propertyValue) {
+    public static boolean waitForElementToBeClickable(WebDriver driver, String operationValue, String property, String propertyValue) {
     	try {
     		isElementClickable(driver, operationValue, property, propertyValue);
     		return true;
@@ -246,5 +246,8 @@ public class BaseWebDrive {
 			e.printStackTrace();
 		}
 		
-	}
+	}    
+  
+    
+    
 }

@@ -252,6 +252,11 @@ public class EncapsulateOperation {
                 result = "javascriptclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("javascriptclick点击对象...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break;
+            case "retryclick":
+            	BaseWebDrive.retryClick(wd, operationValue, property, propertyValue);
+                result = "retryClick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("retryClick点击对象...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+                break;
             case "sendkeys":
                 we.sendKeys(operationValue);
                 result = "sendKeys对象输入...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "; 操作值:" + operationValue + "】";
@@ -335,7 +340,7 @@ public class EncapsulateOperation {
         Alert alert = wd.switchTo().alert();
         switch (operation) {
             case "alertaccept":
-                alert.accept();
+                alert.accept();                
                 result = "弹出框对象点击同意...";
                 LogUtil.APP.info(result);
                 break;
