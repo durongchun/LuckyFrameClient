@@ -244,10 +244,42 @@ public class BaseWebDrive {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-	}    
-  
+		}		
+	}   
+      
+    public static void javaScriptInput(WebDriver driver, String operationValue, String property, String propertyValue) {
+   	    sleep("1000");		
+    	//WebElement element = findElement(driver, property, propertyValue);    	
+    	JavascriptExecutor js = (JavascriptExecutor) driver;
+    	js.executeScript("arguments[0].value='" + operationValue + "'", propertyValue);
+	}  
+    
+    public static WebElement findElement(WebDriver driver, String property, String propertyValue) {
+    	WebElement element = null;
+    	switch (property) {
+        case "id":
+        	element=driver.findElement(By.id(propertyValue));            
+            break;
+        case "name":
+        	element=driver.findElement(By.name(propertyValue));     
+            break;
+        case "xpath":
+        	element=driver.findElement(By.xpath(propertyValue));     
+            break;
+        case "linktext":
+        	element=driver.findElement(By.linkText(propertyValue));      
+            break;
+        case "tagname":
+        	element=driver.findElement(By.tagName(propertyValue));       
+            break;
+        case "cssselector":
+        	element=driver.findElement(By.cssSelector(propertyValue));       
+            break;
+        default:
+            break;
+    }
+    	return element;
+	}
     
     
 }

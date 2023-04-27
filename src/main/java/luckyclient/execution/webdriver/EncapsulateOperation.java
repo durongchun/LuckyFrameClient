@@ -251,11 +251,16 @@ public class EncapsulateOperation {
             	BaseWebDrive.javascriptClick(wd, property, propertyValue);
                 result = "javascriptclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("javascriptclick点击对象...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
-                break;
+                break;            
             case "retryclick":
             	BaseWebDrive.retryClick(wd, operationValue, property, propertyValue);
                 result = "retryClick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("retryClick点击对象...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+                break;
+            case "javascriptinput":
+            	BaseWebDrive.javaScriptInput(wd, operationValue, property, propertyValue);
+                result = "javaScriptInput对象输入...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("javaScriptInput对象输入...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break;
             case "sendkeys":
                 we.sendKeys(operationValue);
@@ -317,12 +322,12 @@ public class EncapsulateOperation {
             	result = "目标对象不可見...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("目标对象不可見...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break; 
-            case "waitclickable":
-                // 显式等待元素可见
-            	BaseWebDrive.isElementClickable(wd, operationValue, property, propertyValue);
-            	result = "目标对象可视...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
-                LogUtil.APP.info("目标对象可视...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
-                break;
+//            case "waitclickable":
+//                // 显式等待元素可见
+//            	BaseWebDrive.isElementClickable(wd, operationValue, property, propertyValue);
+//            	result = "目标对象可视...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+//                LogUtil.APP.info("目标对象可视...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+//                break;
             case "sleep":
                 // 強制等待
             	BaseWebDrive.sleep(operationValue);

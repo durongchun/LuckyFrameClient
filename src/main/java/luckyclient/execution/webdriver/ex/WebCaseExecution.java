@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import cn.hutool.core.util.NumberUtil;
 import luckyclient.execution.dispose.ActionManageForSteps;
@@ -160,74 +161,90 @@ public class WebCaseExecution{
 
             // 页面元素层
             if (null != property && null != propertyValue && null != operation) {
-                WebElement we = isElementExist(wd, property, propertyValue, operation);
-                //判断元素是否存在关键字
-            	if(operation.equals("iselementexist")){
-                    // 判断此元素是否存在
-                    if (null == we) {
-                        LogUtil.APP.warn("获取到的值是【false】");
-                        return "获取到的值是【false】";
-                    }else{
-                        LogUtil.APP.info("获取到的值是【true】");
-                        return "获取到的值是【true】";
-                    }
-            	}
+            	if (operation.contains("hovertoelement")) {
+            		 Actions action = new Actions(wd);
+                	 action.moveToElement(BaseWebDrive.findElement(wd, property, propertyValue)).perform();
+                     result = "mouserelease鼠标释放...";
+                     LogUtil.APP.info(result);                     
+				}
             	
-                // 判断此元素是否存在
-                if (null == we) {
-                    LogUtil.APP.warn("定位对象失败，isElementExist为null!");
-                    return "步骤执行失败：定位的元素不存在！";
-                }
-                
-                //判断当元素存在就点击
-                if(operation.equals("ifclick")) {
-                	//设置页面加载最大时长1秒
-                	wd.manage().timeouts().pageLoadTimeout(1,  TimeUnit.SECONDS);
-                	//设置页面JS加载最大时长1秒
-                	wd.manage().timeouts().setScriptTimeout(1, TimeUnit.SECONDS);
-                	//设置元素出现最大时长1秒
-                	wd.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);                	
-                	
-                	if(null==we){
-                      caselog.insertTaskCaseLog(taskid, caseId, "对象不存在，ifclick不需要进行点击", "info", String.valueOf(stepno), "");
-                      LogUtil.APP.info("获取到的值是【false】,元素不存在或者未显示，无需处理");
-                      return "获取到的值是【false】,元素不存在或者未显示，无需处理";
-                       }
+            	if (operation.contains("javascriptinput")) {
+            		BaseWebDrive.javaScriptInput(wd, operationValue, property, propertyValue);
+                    result = "javaScriptInput对象输入...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                    LogUtil.APP.info("javaScriptInput对象输入...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);                    
+					
+				}else {
+					 WebElement we = isElementExist(wd, property, propertyValue, operation);
+		                //判断元素是否存在关键字
+		            	if(operation.equals("iselementexist")){
+		                    // 判断此元素是否存在
+		                    if (null == we) {
+		                        LogUtil.APP.warn("获取到的值是【false】");
+		                        return "获取到的值是【false】";
+		                    }else{
+		                        LogUtil.APP.info("获取到的值是【true】");
+		                        return "获取到的值是【true】";
+		                    }
+		            	}
+		            	
+		                // 判断此元素是否存在
+		                if (null == we) {
+		                    LogUtil.APP.warn("定位对象失败，isElementExist为null!");
+		                    return "步骤执行失败：定位的元素不存在！";
+		                }
+		                
+		                //判断当元素存在就点击
+		                if(operation.equals("ifclick")) {
+		                	//设置页面加载最大时长1秒
+		                	wd.manage().timeouts().pageLoadTimeout(1,  TimeUnit.SECONDS);
+		                	//设置页面JS加载最大时长1秒
+		                	wd.manage().timeouts().setScriptTimeout(1, TimeUnit.SECONDS);
+		                	//设置元素出现最大时长1秒
+		                	wd.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);                	
+		                	
+		                	if(null==we){
+		                      caselog.insertTaskCaseLog(taskid, caseId, "对象不存在，ifclick不需要进行点击", "info", String.valueOf(stepno), "");
+		                      LogUtil.APP.info("获取到的值是【false】,元素不存在或者未显示，无需处理");
+		                      return "获取到的值是【false】,元素不存在或者未显示，无需处理";
+		                       }
 
-                     if(we.isDisplayed()){
-                         we.click();
-                         result = "ifclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
-                         LogUtil.APP.info("if元素存在，ifclick点击对象...【对象定位属性:{}; 定位属性值:{}】", property, propertyValue);
-                         caselog.insertTaskCaseLog(taskid, caseId, "对象存在，ifclick进行点击", "info", String.valueOf(stepno), "");
-                         return result;
-                         }
+		                     if(we.isDisplayed()){
+		                         we.click();
+		                         result = "ifclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+		                         LogUtil.APP.info("if元素存在，ifclick点击对象...【对象定位属性:{}; 定位属性值:{}】", property, propertyValue);
+		                         caselog.insertTaskCaseLog(taskid, caseId, "对象存在，ifclick进行点击", "info", String.valueOf(stepno), "");
+		                         return result;
+		                         }
 
-                     // 设置页面加载最大时长1秒
-                     wd.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-                     //设置页面JS加载最大超时时长
-                     wd.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
-                     // 设置元素出现最大时长1秒
-                      wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		                     // 设置页面加载最大时长1秒
+		                     wd.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+		                     //设置页面JS加载最大超时时长
+		                     wd.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+		                     // 设置元素出现最大时长1秒
+		                      wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
-                      result = "ifclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
-                      LogUtil.APP.info("if元素存在但未显示，ifclick跳过...【对象定位属性:{}; 定位属性值:{}】", property, propertyValue);
-                      caselog.insertTaskCaseLog(taskid, caseId, "对象存在但未显示，ifclick跳过", "info", String.valueOf(stepno), "");
-                      return result;
-                }
-                
-                //点亮即将操作的元素
-                BaseWebDrive.highLightElement(wd, we);
-                
-                if (operation.contains("select")) {
-                    result = EncapsulateOperation.selectOperation(we, operation, operationValue);
-                } else if (operation.contains("get")) {
-                    result = EncapsulateOperation.getOperation(wd, we, operation, operationValue);
-                } else if (operation.contains("mouse")) {
-                    result = EncapsulateOperation.actionWeOperation(wd, we, operation, operationValue, property, propertyValue);
-                } else {
-                    result = EncapsulateOperation.objectOperation(wd, we, operation, operationValue, property, propertyValue);
-                }
-                // Driver层操作
+		                      result = "ifclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+		                      LogUtil.APP.info("if元素存在但未显示，ifclick跳过...【对象定位属性:{}; 定位属性值:{}】", property, propertyValue);
+		                      caselog.insertTaskCaseLog(taskid, caseId, "对象存在但未显示，ifclick跳过", "info", String.valueOf(stepno), "");
+		                      return result;
+		                }
+		                
+		                //点亮即将操作的元素
+		                BaseWebDrive.highLightElement(wd, we);
+		                
+		                if (operation.contains("select")) {
+		                    result = EncapsulateOperation.selectOperation(we, operation, operationValue);
+		                } else if (operation.contains("get")) {
+		                    result = EncapsulateOperation.getOperation(wd, we, operation, operationValue);
+		                } else if (operation.contains("mouse")) {
+		                    result = EncapsulateOperation.actionWeOperation(wd, we, operation, operationValue, property, propertyValue);
+		                } else {
+		                    result = EncapsulateOperation.objectOperation(wd, we, operation, operationValue, property, propertyValue);
+		                }
+		                // Driver层操作
+					
+				}
+               
             } else if (null == property && null != operation) {
                 // 处理弹出框事件
                 if (operation.contains("alert")) {
