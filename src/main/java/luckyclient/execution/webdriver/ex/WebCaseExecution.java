@@ -168,6 +168,13 @@ public class WebCaseExecution{
                      LogUtil.APP.info(result);                     
 				}
             	
+            	if (operation.contains("selectoption")) {
+            		 BaseWebDrive.selectOption(wd, property, propertyValue, operationValue );
+                     result = "下拉框对象通过Index属性选择...【Index属性值:" + operationValue + "】";
+                     LogUtil.APP.info("下拉框对象通过Index属性选择...【Index属性值:{}】",operationValue);
+                     
+				}
+            	
             	if (operation.contains("javascriptinput")) {
             		BaseWebDrive.javaScriptInput(wd, operationValue, property, propertyValue);
                     result = "javaScriptInput对象输入...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
@@ -233,7 +240,7 @@ public class WebCaseExecution{
 		                BaseWebDrive.highLightElement(wd, we);
 		                
 		                if (operation.contains("select")) {
-		                    result = EncapsulateOperation.selectOperation(we, operation, operationValue);
+		                    result = EncapsulateOperation.selectOperation(wd, we, operation, operationValue);
 		                } else if (operation.contains("get")) {
 		                    result = EncapsulateOperation.getOperation(wd, we, operation, operationValue);
 		                } else if (operation.contains("mouse")) {

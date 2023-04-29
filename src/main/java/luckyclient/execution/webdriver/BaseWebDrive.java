@@ -2,6 +2,7 @@ package luckyclient.execution.webdriver;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -253,6 +254,45 @@ public class BaseWebDrive {
     	JavascriptExecutor js = (JavascriptExecutor) driver;
     	js.executeScript("arguments[0].value='" + operationValue + "'", propertyValue);
 	}  
+    
+    public static void selectOption(WebDriver driver, String property, String propertyValue, String operationValue ) {
+    	List<WebElement> options = findElements(driver, propertyValue, propertyValue);
+    	for (WebElement option : options)
+    	{
+    	    if (option.getText().equals(operationValue))
+    	    {
+    	        option.click(); // click the desired option
+    	        break;
+    	    }
+    	}
+    }
+    
+    public static List<WebElement> findElements(WebDriver driver, String property, String propertyValue) {
+    	List<WebElement> elements = null;
+    	switch (property) {
+        case "id":
+        	elements=driver.findElements(By.id(propertyValue));            
+            break;
+        case "name":
+        	elements=driver.findElements(By.name(propertyValue));     
+            break;
+        case "xpath":
+        	elements=driver.findElements(By.xpath(propertyValue));     
+            break;
+        case "linktext":
+        	elements=driver.findElements(By.linkText(propertyValue));      
+            break;
+        case "tagname":
+        	elements=driver.findElements(By.tagName(propertyValue));       
+            break;
+        case "cssselector":
+        	elements=driver.findElements(By.cssSelector(propertyValue));       
+            break;
+        default:
+            break;
+    }
+    	return elements;
+	}
     
     public static WebElement findElement(WebDriver driver, String property, String propertyValue) {
     	WebElement element = null;

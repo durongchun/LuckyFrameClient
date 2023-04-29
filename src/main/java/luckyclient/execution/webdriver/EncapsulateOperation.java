@@ -46,7 +46,7 @@ import luckyclient.utils.LogUtil;
  */
 public class EncapsulateOperation {
 
-    public static String selectOperation(WebElement we, String operation, String operationValue) {
+    public static String selectOperation(WebDriver wd, WebElement we, String operation, String operationValue) {
         String result = "";
         // 下拉框对象处理
         Select select = new Select(we);
@@ -67,11 +67,12 @@ public class EncapsulateOperation {
                 select.selectByIndex(Integer.parseInt(operationValue));
                 result = "下拉框对象通过Index属性选择...【Index属性值:" + operationValue + "】";
                 LogUtil.APP.info("下拉框对象通过Index属性选择...【Index属性值:{}】",operationValue);
-                break;
+                break;            
             case "isselect":
                 result = "获取到的值是【" + we.isSelected() + "】";
                 LogUtil.APP.info("判断对象是否已经被选择...【结果值:{}】",we.isSelected());
                 break;
+            
             default:
                 break;
         }
@@ -201,6 +202,7 @@ public class EncapsulateOperation {
                 result = "mouserelease鼠标释放...";
                 LogUtil.APP.info(result);
                 break;
+           
             case "mousekey":
                 switch (operationValue) {
                     case "tab":
