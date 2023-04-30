@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
@@ -20,10 +19,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -102,7 +99,7 @@ public class EncapsulateOperation {
             case "getcssvalue":
                 result = "获取到的值是【" + we.getCssValue(value) + "】";
                 LogUtil.APP.info("getCssValue获取对象【{}】属性...【{}属性值:{}】",value,value,result);
-                break;
+                break;                
             case "getcaptcha":
                 result = "获取到的值是【" + Ocr.getCAPTCHA(wd, we) + "】";
                 LogUtil.APP.info("getcaptcha获取验证码...【验证码值:{}】",result);
@@ -201,39 +198,33 @@ public class EncapsulateOperation {
                 action.release().perform();
                 result = "mouserelease鼠标释放...";
                 LogUtil.APP.info(result);
+                break;           
+            case "mousekey(tab)":
+            	action.sendKeys(Keys.TAB).perform();
+                result = "键盘操作TAB键...";
+                LogUtil.APP.info(result);
                 break;
-           
-            case "mousekey":
-                switch (operationValue) {
-                    case "tab":
-                        action.sendKeys(Keys.TAB).perform();
-                        result = "键盘操作TAB键...";
-                        LogUtil.APP.info(result);
-                        break;
-                    case "space":
-                        action.sendKeys(Keys.SPACE).perform();
-                        result = "键盘操作SPACE键...";
-                        LogUtil.APP.info(result);
-                        break;
-                    case "ctrl":
-                        action.sendKeys(Keys.CONTROL).perform();
-                        result = "键盘操作CONTROL键...";
-                        LogUtil.APP.info(result);
-                        break;
-                    case "shift":
-                        action.sendKeys(Keys.SHIFT).perform();
-                        result = "键盘操作SHIFT键...";
-                        LogUtil.APP.info(result);
-                        break;
-                    case "enter":
-                        action.sendKeys(Keys.ENTER).perform();
-                        result = "键盘操作ENTER键...";
-                        LogUtil.APP.info(result);
-                        break;
-                    default:
-                        break;
-                }
+            case "mousekey(space)":
+                action.sendKeys(Keys.SPACE).perform();
+                result = "键盘操作SPACE键...";
+                LogUtil.APP.info(result);
                 break;
+            case "mousekey(ctrl)":
+                action.sendKeys(Keys.CONTROL).perform();
+                result = "键盘操作CONTROL键...";
+                LogUtil.APP.info(result);
+                break;
+            case "mousekey(shift)":
+                action.sendKeys(Keys.SHIFT).perform();
+                result = "键盘操作SHIFT键...";
+                LogUtil.APP.info(result);
+                break;
+            case "mousekey(enter)":
+                action.sendKeys(Keys.ENTER).perform();
+                result = "键盘操作ENTER键...";
+                LogUtil.APP.info(result);
+                break;                      
+            
             default:
                 break;
         }
@@ -274,6 +265,11 @@ public class EncapsulateOperation {
                 result = "clear清空输入框...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("clear清空输入框...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break; // 清空输入框
+            case "chooseoption":
+            	BaseWebDrive.selectOption(wd, property, propertyValue, operationValue );
+                result = "下拉框对象通过li属性选择...【文本:" + operationValue + "】";
+                LogUtil.APP.info("下拉框对象通过文本属性选择...【文本:{}】",operationValue);
+                break;
             case "gotoframe":
                 wd.switchTo().frame(we);
                 result = "gotoframe切换Frame...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
@@ -324,12 +320,12 @@ public class EncapsulateOperation {
             	result = "目标对象不可見...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("目标对象不可見...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break; 
-//            case "waitclickable":
-//                // 显式等待元素可见
-//            	BaseWebDrive.isElementClickable(wd, operationValue, property, propertyValue);
-//            	result = "目标对象可视...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
-//                LogUtil.APP.info("目标对象可视...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
-//                break;
+            case "waitclickable":
+                // 显式等待元素可见
+            	BaseWebDrive.isElementClickable(wd, operationValue, property, propertyValue);
+            	result = "目标对象可视...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("目标对象可视...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+                break;
             case "sleep":
                 // 強制等待
             	BaseWebDrive.sleep(operationValue);

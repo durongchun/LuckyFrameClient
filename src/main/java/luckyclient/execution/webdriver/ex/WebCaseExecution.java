@@ -167,14 +167,7 @@ public class WebCaseExecution{
                      result = "mouserelease鼠标释放...";
                      LogUtil.APP.info(result);                     
 				}
-            	
-            	if (operation.contains("selectoption")) {
-            		 BaseWebDrive.selectOption(wd, property, propertyValue, operationValue );
-                     result = "下拉框对象通过Index属性选择...【Index属性值:" + operationValue + "】";
-                     LogUtil.APP.info("下拉框对象通过Index属性选择...【Index属性值:{}】",operationValue);
-                     
-				}
-            	
+         	
             	if (operation.contains("javascriptinput")) {
             		BaseWebDrive.javaScriptInput(wd, operationValue, property, propertyValue);
                     result = "javaScriptInput对象输入...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
@@ -216,6 +209,7 @@ public class WebCaseExecution{
 		                       }
 
 		                     if(we.isDisplayed()){
+		                    	 BaseWebDrive.isElementClickable(wd, "300000", property, propertyValue);
 		                         we.click();
 		                         result = "ifclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
 		                         LogUtil.APP.info("if元素存在，ifclick点击对象...【对象定位属性:{}; 定位属性值:{}】", property, propertyValue);
@@ -223,11 +217,11 @@ public class WebCaseExecution{
 		                         return result;
 		                         }
 
-		                     // 设置页面加载最大时长1秒
-		                     wd.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-		                     //设置页面JS加载最大超时时长
-		                     wd.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
-		                     // 设置元素出现最大时长1秒
+		                      // 设置页面加载最大时长1秒
+		                      wd.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+		                      //设置页面JS加载最大超时时长
+		                      wd.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+		                      // 设置元素出现最大时长1秒
 		                      wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 		                      result = "ifclick点击对象...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";

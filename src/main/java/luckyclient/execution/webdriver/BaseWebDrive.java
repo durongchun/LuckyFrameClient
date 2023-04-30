@@ -2,6 +2,9 @@ package luckyclient.execution.webdriver;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -255,8 +258,8 @@ public class BaseWebDrive {
     	js.executeScript("arguments[0].value='" + operationValue + "'", propertyValue);
 	}  
     
-    public static void selectOption(WebDriver driver, String property, String propertyValue, String operationValue ) {
-    	List<WebElement> options = findElements(driver, propertyValue, propertyValue);
+    public static void selectOption(WebDriver driver, String property, String propertyValue, String operationValue) {
+    	List<WebElement> options = findElements(driver, property, propertyValue);
     	for (WebElement option : options)
     	{
     	    if (option.getText().equals(operationValue))
@@ -266,6 +269,8 @@ public class BaseWebDrive {
     	    }
     	}
     }
+    
+   
     
     public static List<WebElement> findElements(WebDriver driver, String property, String propertyValue) {
     	List<WebElement> elements = null;
