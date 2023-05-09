@@ -409,7 +409,7 @@ public class EncapsulateOperation {
                 LogUtil.APP.info("获取页面Title...【{}】",wd.getTitle());
                 break;
             case "getvoice":
-            	PlayWav.playVoice(operationValue, wd);
+            	PlayWav.playVoice(wd, operationValue);
                 result = "获取到的语音文本是【" + operationValue + "】";
                 LogUtil.APP.info("获取语音文本...【{}】", operationValue);
                 break;

@@ -43,7 +43,7 @@ public class WebCaseExecution{
     private static String casenote = "备注初始化";
 
     public static void caseExcution(ProjectCase testcase, List<ProjectCaseSteps> steps, String taskid,Integer planId, WebDriver wd, serverOperation caselog, List<ProjectCaseParams> pcplist) {
-    	caselog.updateTaskCaseExecuteStatus(taskid,planId, testcase.getCaseId(), 3);
+    	caselog.updateTaskCaseExecuteStatus(taskid, planId, testcase.getCaseId(), 3);
     	// 把公共参数加入到MAP中
         for (ProjectCaseParams pcp : pcplist) {
             variable.put(pcp.getParamsName(), pcp.getParamsValue());

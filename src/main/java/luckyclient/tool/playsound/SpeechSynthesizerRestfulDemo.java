@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,27 +18,29 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 public class SpeechSynthesizerRestfulDemo {
-	private String accessToken;
+	private static String accessToken;
 	private String appkey;
 	private static Logger logger = LoggerFactory.getLogger(SpeechSynthesizerRestfulDemo.class);
+	private static Long runTime;
 
     public SpeechSynthesizerRestfulDemo(String appkey, String token) {
         this.appkey = appkey;
-        this.accessToken = token;
+        this.accessToken = token;        
     }
 
     /**
-     * HTTPS GET请求
+     * HTTPS GET璇锋眰
      */
     public String processGETRequet(String text, String audioSaveFile, String format, int sampleRate, String voice) {
         /**
-         * 设置HTTPS GET请求�?
-         * 1.使用HTTPS协议
-         * 2.语音识别服务域名：nls-gateway-cn-shanghai.aliyuncs.com
-         * 3.语音识别接口请求路径�?/stream/v1/tts
-         * 4.设置必须请求参数：appkey、token、text、format、sample_rate
-         * 5.设置可�?�请求参数：voice、volume、speech_rate、pitch_rate
+         * 璁剧疆HTTPS GET璇锋眰锟�?
+         * 1.浣跨敤HTTPS鍗忚
+         * 2.璇煶璇嗗埆鏈嶅姟鍩熷悕锛歯ls-gateway-cn-shanghai.aliyuncs.com
+         * 3.璇煶璇嗗埆鎺ュ彛璇锋眰璺緞锟�?/stream/v1/tts
+         * 4.璁剧疆蹇呴』璇锋眰鍙傛暟锛歛ppkey銆乼oken銆乼ext銆乫ormat銆乻ample_rate
+         * 5.璁剧疆鍙拷?锟借姹傚弬鏁帮細voice銆乿olume銆乻peech_rate銆乸itch_rate
          */
         String url = "https://nls-gateway-cn-shanghai.aliyuncs.com/stream/v1/tts";
         url = url + "?appkey=" + appkey;
@@ -45,17 +49,17 @@ public class SpeechSynthesizerRestfulDemo {
         url = url + "&format=" + format;
         url = url + "&voice=" + voice;
         url = url + "&sample_rate=" + String.valueOf(sampleRate);
-        // voice 发音人，可�?�，默认是xiaoyun�?
+        // voice 鍙戦煶浜猴紝鍙拷?锟斤紝榛樿鏄痻iaoyun锟�?
         // url = url + "&voice=" + "xiaoyun";
-        // volume 音量，范围是0~100，可选，默认50�?
+        // volume 闊抽噺锛岃寖鍥存槸0~100锛屽彲閫夛紝榛樿50锟�?
         // url = url + "&volume=" + String.valueOf(50);
-        // speech_rate 语�?�，范围�?-500~500，可选，默认�?0�?
+        // speech_rate 璇拷?锟斤紝鑼冨洿锟�?-500~500锛屽彲閫夛紝榛樿锟�?0锟�?
         // url = url + "&speech_rate=" + String.valueOf(0);
-        // pitch_rate 语调，范围是-500~500，可选，默认�?0�?
+        // pitch_rate 璇皟锛岃寖鍥存槸-500~500锛屽彲閫夛紝榛樿锟�?0锟�?
         // url = url + "&pitch_rate=" + String.valueOf(0);
         System.out.println("URL: " + url);
         /**
-         * HTTPS GET请求，处理服务端的响应
+         * HTTPS GET璇锋眰锛屽鐞嗘湇鍔＄鐨勫搷搴�
          */
         Request request = new Request.Builder().url(url).get().build();
         try {
@@ -70,7 +74,7 @@ public class SpeechSynthesizerRestfulDemo {
                 fout.close();                
             }
             else {
-                // ContentType null 或为 "application/json"
+                // ContentType null 鎴栦负 "application/json"
                 String errorMessage = response.body().string();
                 System.out.println("The GET request failed: " + errorMessage);
             }
@@ -81,16 +85,16 @@ public class SpeechSynthesizerRestfulDemo {
 		return url;
     }
     /**
-     * HTTPS POST请求
+     * HTTPS POST璇锋眰
      */
     public void processPOSTRequest(String text, String audioSaveFile, String format, int sampleRate, String voice) {
         /**
-         * 设置HTTPS POST请求�?
-         * 1.使用HTTPS协议
-         * 2.语音合成服务域名：nls-gateway-cn-shanghai.aliyuncs.com
-         * 3.语音合成接口请求路径�?/stream/v1/tts
-         * 4.设置必须请求参数：appkey、token、text、format、sample_rate
-         * 5.设置可�?�请求参数：voice、volume、speech_rate、pitch_rate
+         * 璁剧疆HTTPS POST璇锋眰锟�?
+         * 1.浣跨敤HTTPS鍗忚
+         * 2.璇煶鍚堟垚鏈嶅姟鍩熷悕锛歯ls-gateway-cn-shanghai.aliyuncs.com
+         * 3.璇煶鍚堟垚鎺ュ彛璇锋眰璺緞锟�?/stream/v1/tts
+         * 4.璁剧疆蹇呴』璇锋眰鍙傛暟锛歛ppkey銆乼oken銆乼ext銆乫ormat銆乻ample_rate
+         * 5.璁剧疆鍙拷?锟借姹傚弬鏁帮細voice銆乿olume銆乻peech_rate銆乸itch_rate
          */
         String url = "https://nls-gateway-cn-shanghai.aliyuncs.com/stream/v1/tts";
         JSONObject taskObject = new JSONObject();
@@ -100,13 +104,13 @@ public class SpeechSynthesizerRestfulDemo {
         taskObject.put("format", format);
         taskObject.put("voice", voice);
         taskObject.put("sample_rate", sampleRate);
-        // voice 发音人，可�?�，默认是xiaoyun�?
+        // voice 鍙戦煶浜猴紝鍙拷?锟斤紝榛樿鏄痻iaoyun锟�?
         // taskObject.put("voice", "xiaoyun");
-        // volume 音量，范围是0~100，可选，默认50�?
+        // volume 闊抽噺锛岃寖鍥存槸0~100锛屽彲閫夛紝榛樿50锟�?
         // taskObject.put("volume", 50);
-        // speech_rate 语�?�，范围�?-500~500，可选，默认�?0�?
+        // speech_rate 璇拷?锟斤紝鑼冨洿锟�?-500~500锛屽彲閫夛紝榛樿锟�?0锟�?
         // taskObject.put("speech_rate", 0);
-        // pitch_rate 语调，范围是-500~500，可选，默认�?0�?
+        // pitch_rate 璇皟锛岃寖鍥存槸-500~500锛屽彲閫夛紝榛樿锟�?0锟�?
         // taskObject.put("pitch_rate", 0);
         String bodyContent = taskObject.toJSONString();
         System.out.println("POST Body Content: " + bodyContent);
@@ -128,7 +132,7 @@ public class SpeechSynthesizerRestfulDemo {
                 System.out.println("The POST request succeed!");
             }
             else {
-                // ContentType  null 或为 "application/json"
+                // ContentType  null 鎴栦负 "application/json"
                 String errorMessage = response.body().string();
                 System.out.println("The POST request failed: " + errorMessage);
             }
@@ -137,14 +141,9 @@ public class SpeechSynthesizerRestfulDemo {
             e.printStackTrace();
         }
     }
-    public static String getVoice(String text) {
-        String token = null;
-		try {
-			token = TokenDemo.getToken();
-		} catch (ClientException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+    public static String getVoice(String text) { 
+    	timer();
+    	String token = accessToken;
         String appkey = "rfs83bFVLgV9opST";
         SpeechSynthesizerRestfulDemo demo = new SpeechSynthesizerRestfulDemo(appkey, token);
         
@@ -163,6 +162,51 @@ public class SpeechSynthesizerRestfulDemo {
         String url = demo.processGETRequet(textUrlEncode, audioSaveFile, format, sampleRate, "siyue");
         //demo.processPOSTRequest(text, audioSaveFile, format, sampleRate, "siyue");        
 		return url;
-    }	
+    }
+    
+    public static void timer() {       
+        // 获取当前时间        
+        long currentTime = System.currentTimeMillis();
 
+        // 计算下一个每天的请求时间点
+        long interval = 24 * 60 * 60 * 1000; // 一天的毫秒数
+        long delay = currentTime - runTime;
+        
+        if (delay > interval) {
+        	String newToken = getTokenFromServer();
+        	accessToken = newToken;
+        }
+
+    }
+    
+    public static Long runTime() {
+    	// 获取当前时间
+    	runTime = System.currentTimeMillis();
+        return runTime;
+	}
+
+    static class MyTask extends TimerTask {
+        public void run() {
+            // 在这里编写需要执行的代码
+            String newToken = getTokenFromServer();
+            if (newToken != null) {
+            	accessToken = newToken;
+            }
+        }
+    }
+
+    public static String getTokenFromServer() {
+        // 在这里编写从服务端获取token的代码
+    	try {
+    		accessToken = TokenDemo.getToken();
+    		return accessToken;
+		} catch (ClientException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();			
+	        return null;
+		}
+        
+    }
+    
+   
 }

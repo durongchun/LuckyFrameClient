@@ -95,7 +95,7 @@ public class PlayWav {
     }
 
 
-	public static void playVoice(String text, WebDriver driver) {
+	public static void playVoice(WebDriver driver, String text) {
 		try {
 			driver.manage().getCookies();
 			// text to voice

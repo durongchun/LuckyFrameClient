@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import cn.hutool.core.util.BooleanUtil;
 import luckyclient.netty.NettyClient;
+import luckyclient.tool.playsound.SpeechSynthesizerRestfulDemo;
 import luckyclient.utils.config.SysConfig;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -39,6 +40,8 @@ public class RunService {
 		// TODO Auto-generated method stub
 		PropertyConfigurator.configure(APPLICATION_HOME + File.separator +"bootlog4j.conf");
 		SpringApplication.run(RunService.class, args);
+		SpeechSynthesizerRestfulDemo.getTokenFromServer();
+		SpeechSynthesizerRestfulDemo.runTime();
 		try {
 			CLIENT_IP = InetAddress.getLocalHost().getHostAddress();
 			log.info("Æô¶¯¿Í»§¶Ë¼àÌý,ÇëÉÔºó......¼àÌýIP:{}",CLIENT_IP);

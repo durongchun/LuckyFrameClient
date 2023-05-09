@@ -356,7 +356,7 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>3.9.1</version>
-		</dependency> 
+		</dependency>       
 	</dependencies>
 	<!--排除版本管理警告-->
 	<dependencyManagement>
