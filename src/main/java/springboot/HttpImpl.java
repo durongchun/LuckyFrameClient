@@ -96,16 +96,16 @@ public class HttpImpl {
 			else {
 				RunAutomationTest.runAutomationTest(runTaskEntity.getTaskId(), driver);
 			}	
-//			if(OS.startsWith("win")){
-//				log.info("开始调起windows命令行窗口...");
-//				run.exec("cmd.exe /k start " + "task.cmd" +" "+ sbf.toString(), null,new File(RunService.APPLICATION_HOME+File.separator));
-//				log.info("调起windows命令行窗口完成...");
-//			}else{
-//				log.info("开始调起Linux命令脚本...");
-//				Process ps = Runtime.getRuntime().exec(RunService.APPLICATION_HOME+File.separator+"task.sh"+ " " +sbf.toString());
-//		        ps.waitFor();
-//				log.info("调起Linux命令脚本完成...");
-//			}			
+			/*if(OS.startsWith("win")){
+				log.info("开始调起windows命令行窗口...");
+				run.exec("cmd.exe /k start " + "task.cmd" +" "+ sbf.toString(), null,new File(RunService.APPLICATION_HOME+File.separator));
+				log.info("调起windows命令行窗口完成...");
+			}else{
+				log.info("开始调起Linux命令脚本...");
+				Process ps = Runtime.getRuntime().exec(RunService.APPLICATION_HOME+File.separator+"task.sh"+ " " +sbf.toString());
+		        ps.waitFor();
+				log.info("调起Linux命令脚本完成...");
+			}*/			
 		} catch (Exception e) {
 			log.error("启动任务模式测试程序异常！！！",e);
 			return "启动任务模式测试程序异常！！！";
