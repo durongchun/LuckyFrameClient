@@ -3,6 +3,7 @@ package luckyclient.execution.webdriver;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.net.URL;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -12,6 +13,9 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
 
 import luckyclient.utils.LogUtil;
 import springboot.RunService;
@@ -147,5 +151,18 @@ public class WebDriverInitialization{
         // driver.quit();       
         return webDriver;
 	}		
-
+	/**
+	 * 初始化RemoteWebDriver
+	 * @return 返回初始化结果
+	 * @throws IOException 读取配置文件异常
+	 */
+	public static WebDriver setRemoteWebDriverForReuse() throws Exception {        
+        //第一个参数：表示服务器的地址。第二个参数：表示预期的执行对象，其他的浏览器都可以以此类推
+        WebDriver WebDriver = new RemoteWebDriver(new URL("http://38.88.88.18:4444/wd/hub/"), DesiredCapabilities.chrome());
+        WebDriver.manage().window().maximize();
+        WebDriver.get("http://www.baidu.com");
+        Thread.sleep(2000);        
+        System.out.println("开始");
+        return WebDriver;
+   }
 }

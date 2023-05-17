@@ -89,8 +89,11 @@ public class HttpImpl {
 			log.info("启动任务模式测试程序...调度名称:【{}】  任务ID:【{}】",runTaskEntity.getSchedulingName(),runTaskEntity.getTaskId());
 			
 			if (runTaskEntity.getSchedulingName().contains("Start Browser")) {
-				driver = WebDriverInitialization.setWebDriverForReuse();				
-			}else {
+				driver = WebDriverInitialization.setWebDriverForReuse();					
+			}else if (runTaskEntity.getSchedulingName().contains("Start RemoteBrowser")) {
+				driver = WebDriverInitialization.setRemoteWebDriverForReuse();
+			}
+			else {
 				RunAutomationTest.runAutomationTest(runTaskEntity.getTaskId(), driver);
 			}	
 //			if(OS.startsWith("win")){
