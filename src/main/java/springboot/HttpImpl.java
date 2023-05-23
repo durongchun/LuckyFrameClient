@@ -90,8 +90,9 @@ public class HttpImpl {
 			
 			if (runTaskEntity.getSchedulingName().contains("Start Browser")) {
 				driver = WebDriverInitialization.setWebDriverForReuse();					
-			}else if (runTaskEntity.getSchedulingName().contains("Start RemoteBrowser")) {
-				driver = WebDriverInitialization.setRemoteWebDriverForReuse();
+			}else if (runTaskEntity.getSchedulingName().contains("Run Remote")) {
+				String url = runTaskEntity.getSchedulingName().replaceAll("-|\\ ", "").substring(9).trim();
+				driver = WebDriverInitialization.setRemoteWebDriverForReuse(url);
 			}
 			else {
 				RunAutomationTest.runAutomationTest(runTaskEntity.getTaskId(), driver);
