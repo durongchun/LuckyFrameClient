@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
@@ -19,8 +20,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -30,6 +33,8 @@ import luckyclient.execution.dispose.ChangString;
 import luckyclient.execution.webdriver.ocr.Ocr;
 import luckyclient.tool.playsound.PlayWav;
 import luckyclient.utils.LogUtil;
+import luckyclient.execution.webdriver.BaseWebDrive;
+
 
 /**
  * =================================================================
@@ -409,9 +414,9 @@ public class EncapsulateOperation {
                 LogUtil.APP.info("获取页面Title...【{}】",wd.getTitle());
                 break;
             case "getvoice":
-            	PlayWav.playVoice(wd, operationValue);
-                result = "获取到的语音文本是【" + operationValue + "】";
-                LogUtil.APP.info("获取语音文本...【{}】", operationValue);
+//            	PlayWav.playVoice(wd, operationValue);
+//                result = "获取到的语音文本是【" + operationValue + "】";
+//                LogUtil.APP.info("获取语音文本...【{}】", operationValue);
                 break;
             case "getwindowhandle":
                 result = getTargetWindowHandle(wd, operationValue);
@@ -672,6 +677,18 @@ public class EncapsulateOperation {
             }
         }
     }
+    
+    /**
+	 * Switch frame according to element located element
+	 *
+	 * @param locator frame
+	 * @return drive
+	 */
+	public WebDriver switchFrame(WebDriver driver, String property, String propertyValue) {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebElement iframeElement = wait.until(ExpectedConditions.presenceOfElementLocated(BaseWebDrive.by(property, propertyValue))); 
+		return driver.switchTo().frame(iframeElement);
+	}
 
     //新增修改点 设置浏览器窗口大小
     private static void manageWindowSetSize(WebDriver driver,String operationValue) {

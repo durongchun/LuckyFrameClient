@@ -158,11 +158,11 @@ public class WebDriverInitialization{
 	 */
 	public static WebDriver setRemoteWebDriverForReuse(String url) throws Exception {        
         //第一个参数：表示服务器的地址。第二个参数：表示预期的执行对象，其他的浏览器都可以以此类推
-        WebDriver WebDriver = new RemoteWebDriver(new URL("http://" + url + ":4444/wd/hub/"), DesiredCapabilities.chrome());
-        WebDriver.manage().window().maximize();
-        WebDriver.get("http://www.baidu.com");
+        WebDriver driver = new RemoteWebDriver(new URL("http://" + url + ":4444/wd/hub/"), DesiredCapabilities.chrome());
+        driver.manage().window().maximize();
+        driver.get("http://www.baidu.com");
         Thread.sleep(2000);        
         System.out.println("开始");
-        return WebDriver;
+        return driver;
    }
 }
