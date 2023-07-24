@@ -280,6 +280,11 @@ public class EncapsulateOperation {
                 result = "gotoframe切换Frame...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("gotoframe切换Frame...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break;
+            case "switchoutofframe":
+            	switchOutOfFrame(wd);
+                result = "switchoutofframe切换Frame...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("switchoutofframe切换Frame...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+                break;
             case "isenabled":
                 result = "获取到的值是【"+we.isEnabled()+"】";
                 LogUtil.APP.info("获取到的值是【{}】",we.isEnabled());
@@ -331,10 +336,22 @@ public class EncapsulateOperation {
             	result = "目标对象可视...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("目标对象可视...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break;
-            case "sleep":
+            case "waitforseconds":
                 // 強制等待
-            	BaseWebDrive.sleep(operationValue);
+            	BaseWebDrive.waitForSeconds(operationValue);
             	result = "強制等待...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("強制等待...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+                break;
+            case "waitforjquerytoload":
+                // 強制等待
+            	BaseWebDrive.waitForJQueryToLoad(wd, operationValue);
+            	result = "等待jqueryloading...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
+                LogUtil.APP.info("強制等待...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
+                break;
+            case "waituntilpageloadcomplete":
+                // 強制等待
+            	BaseWebDrive.waitUntilPageLoadComplete(wd, operationValue);
+            	result = "等待页面loading...【对象定位属性:" + property + "; 定位属性值:" + propertyValue + "】";
                 LogUtil.APP.info("強制等待...【对象定位属性:{}; 定位属性值:{}】",property,propertyValue);
                 break;
             default:
@@ -414,9 +431,10 @@ public class EncapsulateOperation {
                 LogUtil.APP.info("获取页面Title...【{}】",wd.getTitle());
                 break;
             case "getvoice":
-//            	PlayWav.playVoice(wd, operationValue);
-//                result = "获取到的语音文本是【" + operationValue + "】";
-//                LogUtil.APP.info("获取语音文本...【{}】", operationValue);
+				/*
+				 * PlayWav.playVoice(wd, operationValue); result = "获取到的语音文本是【" + operationValue
+				 * + "】"; LogUtil.APP.info("获取语音文本...【{}】", operationValue);
+				 */
                 break;
             case "getwindowhandle":
                 result = getTargetWindowHandle(wd, operationValue);
@@ -688,6 +706,10 @@ public class EncapsulateOperation {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		WebElement iframeElement = wait.until(ExpectedConditions.presenceOfElementLocated(BaseWebDrive.by(property, propertyValue))); 
 		return driver.switchTo().frame(iframeElement);
+	}
+	
+	public static WebDriver switchOutOfFrame(WebDriver driver) {
+		return driver.switchTo().defaultContent();
 	}
 
     //新增修改点 设置浏览器窗口大小

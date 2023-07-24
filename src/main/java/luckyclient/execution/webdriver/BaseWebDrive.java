@@ -2,11 +2,7 @@ package luckyclient.execution.webdriver;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -17,11 +13,11 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.Augmenter;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import luckyclient.utils.LogUtil;
-import luckyclient.utils.config.SysConfig;
 import springboot.RunService;
 
 /**
@@ -68,7 +64,7 @@ public class BaseWebDrive {
 	 * @author Seagull
 	 * @date 2019Äê9ÔÂ6ÈÕ
 	 */
-	public static void highLightElement(WebDriver driver, WebElement element) {		
+	public static void highLightElement(WebDriver driver, WebElement element) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		String originalStyle = element.getAttribute("style");
 		js.executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');", element);
@@ -81,7 +77,7 @@ public class BaseWebDrive {
 		}
 
 		// Reset the element's original style
-		js.executeScript("arguments[0].setAttribute('style', '" + originalStyle + "');", element);		
+		js.executeScript("arguments[0].setAttribute('style', '" + originalStyle + "');", element);
 	}
 
 	public static void javascriptClick(WebDriver driver, String property, String propertyValue) {
@@ -145,17 +141,52 @@ public class BaseWebDrive {
 				.not(ExpectedConditions.visibilityOfAllElementsLocatedBy(by(property, propertyValue))));
 	}
 
-	public static void sleep(String operationValue) {
-		int seconds = Integer.valueOf(operationValue);
+	public static void waitForSeconds(String operationValue) {		
 		try {
-			Thread.sleep(seconds * 1000);
+			Thread.sleep(Long.parseLong(operationValue) * 1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
+	private static final int TIMEOUT_SECONDS = 30;
+
+	/**
+	 * Wait for jQuery to load
+	 */
+	public static void waitForJQueryToLoad(WebDriver driver, String operationValue) {		
+		WebDriverWait wait = new WebDriverWait(driver, Long.parseLong(operationValue));
+
+		// Wait for jQuery to be active
+		ExpectedCondition<Boolean> jQueryCondition = d -> {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			return (Boolean) js.executeScript("return jQuery.active == 0");
+		};
+
+		wait.until(jQueryCondition);
+
+		// Wait for document ready state
+		ExpectedCondition<Boolean> documentReadyCondition = d -> {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			return js.executeScript("return document.readyState").equals("complete");
+		};
+
+		wait.until(documentReadyCondition);
+	}
+
+	@SuppressWarnings("unused")
+	public static void waitUntilPageLoadComplete(WebDriver driver, String operationValue ) {
+		WebDriverWait wait = new WebDriverWait(driver, Long.parseLong(operationValue));
+
+		// Wait for document ready state
+		wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete'"));
+
+		// Wait for jQuery or other asynchronous activities (if necessary)
+		wait.until(ExpectedConditions.jsReturnsValue("return jQuery.active == 0"));
+	}
+
 	public static void javaScriptInput(WebDriver driver, String operationValue, String property, String propertyValue) {
-		sleep("1000");
+		waitForSeconds("1000");
 		// WebElement element = findElement(driver, property, propertyValue);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].value='" + operationValue + "'", propertyValue);
