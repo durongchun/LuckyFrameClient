@@ -252,7 +252,7 @@ public class WebCaseExecution{
                     result = EncapsulateOperation.alertOperation(wd, operation);
                 } else if (operation.contains("mouse")) {
                     result = EncapsulateOperation.actionOperation(wd, operation, operationValue);
-                } else if (operation.contains("switchoutofframe") || operation.contains("wait")) {
+                } else if (operation.contains("frame") || operation.contains("wait")) {                	
                     result = EncapsulateOperation.objectOperation(wd, null, operation, operationValue, property, propertyValue);
                 } else {
                     result = EncapsulateOperation.driverOperation(wd, operation, operationValue);
